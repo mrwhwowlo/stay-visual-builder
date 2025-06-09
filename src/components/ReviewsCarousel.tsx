@@ -19,7 +19,7 @@ interface ReviewsCarouselProps {
 const ReviewsCarousel = ({ reviews }: ReviewsCarouselProps) => {
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-semibold">What guests are saying</h2>
+      <h2 className="text-2xl font-semibold">Vad gästerna säger</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {reviews.map((review) => (

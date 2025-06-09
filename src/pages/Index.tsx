@@ -12,11 +12,11 @@ import Footer from '../components/Footer';
 const Index = () => {
   const listingData = {
     id: '1',
-    title: 'Stunning Ocean View Villa with Private Pool',
-    location: 'Malibu, California',
+    title: 'Fantastisk havsutsikt villa med privat pool',
+    location: 'Marbella, Spanien',
     rating: 4.95,
     reviewCount: 128,
-    price: 495,
+    price: 4950,
     images: [
       'https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&h=600&fit=crop',
       'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&h=600&fit=crop',
@@ -25,53 +25,53 @@ const Index = () => {
       'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&h=600&fit=crop'
     ],
     host: {
-      name: 'Sarah Johnson',
+      name: 'Andreas',
       avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face',
       isSuperhost: true,
-      joinedDate: 'March 2018'
+      joinedDate: 'mars 2018'
     },
-    description: 'Escape to this breathtaking oceanfront villa where luxury meets serenity. Wake up to panoramic Pacific views, unwind by your private infinity pool, and experience the ultimate coastal retreat. This meticulously designed home features floor-to-ceiling windows, premium furnishings, and every amenity you need for an unforgettable stay.',
+    description: 'Fly till denna fantastiska havsnära villa där lyx möter lugn. Vakna till panoramautsikt över Medelhavet, koppla av vid din privata infinitypool och upplev den ultimata kustretreaten. Detta noggrant designade hem har fönster från golv till tak, förstklassig inredning och alla bekvämligheter du behöver för en oförglömlig vistelse.',
     amenities: [
-      { icon: '🏊‍♂️', name: 'Private pool' },
-      { icon: '🌊', name: 'Ocean view' },
-      { icon: '🍳', name: 'Full kitchen' },
-      { icon: '📶', name: 'Fast wifi' },
-      { icon: '🅿️', name: 'Free parking' },
-      { icon: '❄️', name: 'Air conditioning' },
-      { icon: '🔥', name: 'Fireplace' },
-      { icon: '🧺', name: 'Washer & dryer' }
+      { icon: '🏊‍♂️', name: 'Privat pool' },
+      { icon: '🌊', name: 'Havsutsikt' },
+      { icon: '🍳', name: 'Fullt utrustat kök' },
+      { icon: '📶', name: 'Snabbt wifi' },
+      { icon: '🅿️', name: 'Gratis parkering' },
+      { icon: '❄️', name: 'Luftkonditionering' },
+      { icon: '🔥', name: 'Öppen spis' },
+      { icon: '🧺', name: 'Tvättmaskin och torktumlare' }
     ],
     reviews: [
       {
         id: '1',
-        userName: 'Michael Chen',
+        userName: 'Marcus',
         userAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face',
-        date: 'November 2024',
-        text: 'Absolutely stunning property! The ocean views are even better than the photos. Sarah was an incredible host and the house had everything we needed.',
+        date: 'november 2024',
+        text: 'Helt fantastisk boende! Havsutsikten var ännu bättre än bilderna. Andreas var en otrolig värd och huset hade allt vi behövde.',
         rating: 5
       },
       {
         id: '2',
-        userName: 'Emma Rodriguez',
+        userName: 'Emma',
         userAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face',
-        date: 'October 2024',
-        text: 'Perfect getaway spot! The private pool was amazing and the kitchen was fully equipped. Will definitely book again.',
+        date: 'oktober 2024',
+        text: 'Perfekt semesterplats! Den privata poolen var fantastisk och köket var fullt utrustat. Kommer definitivt att boka igen.',
         rating: 5
       },
       {
         id: '3',
-        userName: 'David Thompson',
+        userName: 'David',
         userAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face',
-        date: 'September 2024',
-        text: 'Incredible location and beautiful home. The sunset views from the deck are unforgettable. Highly recommend!',
+        date: 'september 2024',
+        text: 'Otroligt läge och vackert hem. Solnedgångarna från terrassen är oförglömliga. Rekommenderar starkt!',
         rating: 5
       }
     ],
-    mapCoordinates: { lat: 34.0259, lng: -118.7798 }
+    mapCoordinates: { lat: 36.5108, lng: -4.8839 }
   };
 
   const handleReservation = (dates: { checkIn: Date; checkOut: Date }, guests: number) => {
-    console.log('Reservation requested:', { dates, guests, listingId: listingData.id });
+    console.log('Bokning begärd:', { dates, guests, listingId: listingData.id });
     // Navigate to reservation page in a real app
   };
 

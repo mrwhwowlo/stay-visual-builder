@@ -29,7 +29,7 @@ const ListingInfo = ({ title, location, rating, reviewCount, host }: ListingInfo
         <div className="flex items-center space-x-1">
           <Star className="h-4 w-4 fill-current text-yellow-500" />
           <span className="font-medium">{rating}</span>
-          <span className="text-muted-foreground">({reviewCount} reviews)</span>
+          <span className="text-muted-foreground">({reviewCount} recensioner)</span>
         </div>
         <div className="flex items-center space-x-1 text-muted-foreground">
           <MapPin className="h-4 w-4" />
@@ -46,15 +46,15 @@ const ListingInfo = ({ title, location, rating, reviewCount, host }: ListingInfo
         />
         <div>
           <div className="flex items-center space-x-2">
-            <span className="font-medium">Hosted by {host.name}</span>
+            <span className="font-medium">Värd: {host.name}</span>
             {host.isSuperhost && (
               <Badge variant="secondary" className="text-xs">
-                Superhost
+                Supervärd
               </Badge>
             )}
           </div>
           <div className="text-sm text-muted-foreground">
-            Hosting since {host.joinedDate}
+            Värd sedan {host.joinedDate}
           </div>
         </div>
       </div>

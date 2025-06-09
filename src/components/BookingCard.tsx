@@ -31,8 +31,8 @@ const BookingCard = ({ price, rating, reviewCount, onReserve }: BookingCardProps
   };
 
   const formatDate = (date: Date | null) => {
-    if (!date) return 'Add date';
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    if (!date) return 'Lägg till datum';
+    return date.toLocaleDateString('sv-SE', { month: 'short', day: 'numeric' });
   };
 
   return (
@@ -40,8 +40,8 @@ const BookingCard = ({ price, rating, reviewCount, onReserve }: BookingCardProps
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-baseline space-x-1">
-            <span className="text-2xl font-bold">${price}</span>
-            <span className="text-muted-foreground">night</span>
+            <span className="text-2xl font-bold">{price} kr</span>
+            <span className="text-muted-foreground">natt</span>
           </div>
           <div className="flex items-center space-x-1 text-sm">
             <Star className="h-4 w-4 fill-current text-yellow-500" />
@@ -58,14 +58,14 @@ const BookingCard = ({ price, rating, reviewCount, onReserve }: BookingCardProps
             className="p-3 text-left border-r border-border hover:bg-accent transition-colors"
             onClick={() => {/* Open date picker */}}
           >
-            <div className="text-xs font-medium text-muted-foreground">CHECK-IN</div>
+            <div className="text-xs font-medium text-muted-foreground">INCHECKNING</div>
             <div className="text-sm">{formatDate(checkIn)}</div>
           </button>
           <button 
             className="p-3 text-left hover:bg-accent transition-colors"
             onClick={() => {/* Open date picker */}}
           >
-            <div className="text-xs font-medium text-muted-foreground">CHECKOUT</div>
+            <div className="text-xs font-medium text-muted-foreground">UTCHECKNING</div>
             <div className="text-sm">{formatDate(checkOut)}</div>
           </button>
         </div>
@@ -76,9 +76,9 @@ const BookingCard = ({ price, rating, reviewCount, onReserve }: BookingCardProps
             className="w-full p-3 text-left border border-border rounded-lg hover:bg-accent transition-colors"
             onClick={() => setShowGuestSelector(!showGuestSelector)}
           >
-            <div className="text-xs font-medium text-muted-foreground">GUESTS</div>
+            <div className="text-xs font-medium text-muted-foreground">GÄSTER</div>
             <div className="text-sm flex items-center justify-between">
-              <span>{guests} guest{guests !== 1 ? 's' : ''}</span>
+              <span>{guests} gäst{guests !== 1 ? 'er' : ''}</span>
               <Users className="h-4 w-4" />
             </div>
           </button>
@@ -87,7 +87,7 @@ const BookingCard = ({ price, rating, reviewCount, onReserve }: BookingCardProps
             <Card className="absolute top-full mt-2 w-full z-10 border border-border">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
-                  <span>Guests</span>
+                  <span>Gäster</span>
                   <div className="flex items-center space-x-3">
                     <Button 
                       variant="outline" 
@@ -120,11 +120,11 @@ const BookingCard = ({ price, rating, reviewCount, onReserve }: BookingCardProps
           onClick={handleReserve}
           disabled={!checkIn || !checkOut}
         >
-          Reserve
+          Reservera
         </Button>
 
         <p className="text-center text-sm text-muted-foreground">
-          You won't be charged yet
+          Du debiteras inte ännu
         </p>
 
         {/* Price Breakdown */}
@@ -133,22 +133,22 @@ const BookingCard = ({ price, rating, reviewCount, onReserve }: BookingCardProps
             <Separator />
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="underline">${price} x {nights} nights</span>
-                <span>${totalBeforeFees}</span>
+                <span className="underline">{price} kr x {nights} nätter</span>
+                <span>{totalBeforeFees} kr</span>
               </div>
               <div className="flex justify-between">
-                <span className="underline">Cleaning fee</span>
-                <span>${cleaningFee}</span>
+                <span className="underline">Städavgift</span>
+                <span>{cleaningFee} kr</span>
               </div>
               <div className="flex justify-between">
-                <span className="underline">Service fee</span>
-                <span>${serviceFee}</span>
+                <span className="underline">Serviceavgift</span>
+                <span>{serviceFee} kr</span>
               </div>
             </div>
             <Separator />
             <div className="flex justify-between font-medium text-base">
-              <span>Total before taxes</span>
-              <span>${total}</span>
+              <span>Totalt före skatter</span>
+              <span>{total} kr</span>
             </div>
           </div>
         )}

@@ -13,7 +13,7 @@ const Description = ({ text }: DescriptionProps) => {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">About this place</h2>
+      <h2 className="text-2xl font-semibold">Om det här boendet</h2>
       <div className="text-muted-foreground leading-relaxed">
         {displayText}
         {shouldTruncate && (
@@ -22,7 +22,7 @@ const Description = ({ text }: DescriptionProps) => {
             className="p-0 h-auto font-medium underline text-foreground"
             onClick={() => setIsExpanded(!isExpanded)}
           >
-            {isExpanded ? ' Show less' : ' Show more'}
+            {isExpanded ? ' Visa mindre' : ' Visa mer'}
           </Button>
         )}
       </div>

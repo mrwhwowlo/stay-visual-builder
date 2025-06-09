@@ -16,13 +16,13 @@ const Header = () => {
           {/* Search Bar - Hidden on mobile */}
           <div className="hidden md:flex items-center bg-background border border-border rounded-full shadow-sm hover:shadow-md transition-shadow">
             <div className="px-6 py-2 border-r border-border">
-              <div className="text-sm font-medium">Anywhere</div>
+              <div className="text-sm font-medium">Var som helst</div>
             </div>
             <div className="px-6 py-2 border-r border-border">
-              <div className="text-sm font-medium">Any week</div>
+              <div className="text-sm font-medium">Vilken vecka som helst</div>
             </div>
             <div className="px-6 py-2">
-              <div className="text-sm text-muted-foreground">Add guests</div>
+              <div className="text-sm text-muted-foreground">Lägg till gäster</div>
             </div>
             <Button size="sm" className="rounded-full mr-2">
               <Search className="h-4 w-4" />
@@ -32,7 +32,7 @@ const Header = () => {
           {/* Right Side */}
           <div className="flex items-center space-x-4">
             <Button variant="ghost" className="hidden md:flex">
-              Become a host
+              Bli värd
             </Button>
             <Button variant="ghost" size="icon">
               <Globe className="h-4 w-4" />
