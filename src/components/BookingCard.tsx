@@ -20,7 +20,7 @@ const BookingCard = ({ price, rating, reviewCount, onReserve }: BookingCardProps
 
   const nights = checkIn && checkOut ? Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24)) : 0;
   const totalBeforeFees = nights * price;
-  const cleaningFee = 75;
+  const cleaningFee = 750;
   const serviceFee = Math.round(totalBeforeFees * 0.14);
   const total = totalBeforeFees + cleaningFee + serviceFee;
 
@@ -36,74 +36,74 @@ const BookingCard = ({ price, rating, reviewCount, onReserve }: BookingCardProps
   };
 
   return (
-    <Card className="sticky top-24">
+    <Card className="sticky top-32 border border-gray-200 shadow-xl rounded-xl">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-baseline space-x-1">
-            <span className="text-2xl font-bold">{price} kr</span>
-            <span className="text-muted-foreground">natt</span>
+            <span className="text-2xl font-semibold text-gray-900">{price.toLocaleString('sv-SE')} kr</span>
+            <span className="text-gray-600"> natt</span>
           </div>
           <div className="flex items-center space-x-1 text-sm">
-            <Star className="h-4 w-4 fill-current text-yellow-500" />
-            <span className="font-medium">{rating}</span>
-            <span className="text-muted-foreground">({reviewCount})</span>
+            <Star className="h-4 w-4 fill-current text-black" />
+            <span className="font-medium text-gray-900">{rating}</span>
+            <span className="text-gray-600">({reviewCount})</span>
           </div>
         </div>
       </CardHeader>
 
       <CardContent className="space-y-4">
         {/* Date Selection */}
-        <div className="grid grid-cols-2 border border-border rounded-lg overflow-hidden">
+        <div className="grid grid-cols-2 border border-gray-300 rounded-lg overflow-hidden">
           <button 
-            className="p-3 text-left border-r border-border hover:bg-accent transition-colors"
+            className="p-3 text-left border-r border-gray-300 hover:bg-gray-50 transition-colors"
             onClick={() => {/* Open date picker */}}
           >
-            <div className="text-xs font-medium text-muted-foreground">INCHECKNING</div>
-            <div className="text-sm">{formatDate(checkIn)}</div>
+            <div className="text-xs font-semibold text-gray-900 uppercase">Incheckning</div>
+            <div className="text-sm text-gray-600">{formatDate(checkIn)}</div>
           </button>
           <button 
-            className="p-3 text-left hover:bg-accent transition-colors"
+            className="p-3 text-left hover:bg-gray-50 transition-colors"
             onClick={() => {/* Open date picker */}}
           >
-            <div className="text-xs font-medium text-muted-foreground">UTCHECKNING</div>
-            <div className="text-sm">{formatDate(checkOut)}</div>
+            <div className="text-xs font-semibold text-gray-900 uppercase">Utcheckning</div>
+            <div className="text-sm text-gray-600">{formatDate(checkOut)}</div>
           </button>
         </div>
 
         {/* Guest Selection */}
         <div className="relative">
           <button 
-            className="w-full p-3 text-left border border-border rounded-lg hover:bg-accent transition-colors"
+            className="w-full p-3 text-left border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             onClick={() => setShowGuestSelector(!showGuestSelector)}
           >
-            <div className="text-xs font-medium text-muted-foreground">GÄSTER</div>
-            <div className="text-sm flex items-center justify-between">
+            <div className="text-xs font-semibold text-gray-900 uppercase">Gäster</div>
+            <div className="text-sm flex items-center justify-between text-gray-600">
               <span>{guests} gäst{guests !== 1 ? 'er' : ''}</span>
               <Users className="h-4 w-4" />
             </div>
           </button>
 
           {showGuestSelector && (
-            <Card className="absolute top-full mt-2 w-full z-10 border border-border">
+            <Card className="absolute top-full mt-2 w-full z-10 border border-gray-200 shadow-lg">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
-                  <span>Gäster</span>
+                  <span className="text-gray-900">Gäster</span>
                   <div className="flex items-center space-x-3">
                     <Button 
                       variant="outline" 
                       size="icon"
                       onClick={() => setGuests(Math.max(1, guests - 1))}
                       disabled={guests <= 1}
-                      className="h-8 w-8 rounded-full"
+                      className="h-8 w-8 rounded-full border-gray-300"
                     >
                       -
                     </Button>
-                    <span className="w-8 text-center">{guests}</span>
+                    <span className="w-8 text-center text-gray-900">{guests}</span>
                     <Button 
                       variant="outline" 
                       size="icon"
                       onClick={() => setGuests(guests + 1)}
-                      className="h-8 w-8 rounded-full"
+                      className="h-8 w-8 rounded-full border-gray-300"
                     >
                       +
                     </Button>
@@ -116,39 +116,39 @@ const BookingCard = ({ price, rating, reviewCount, onReserve }: BookingCardProps
 
         {/* Reserve Button */}
         <Button 
-          className="w-full h-12 text-base font-medium"
+          className="w-full h-12 text-base font-semibold bg-gradient-to-r from-[#E61E4D] to-[#E31C5F] hover:from-[#D70466] hover:to-[#BD1E59] text-white rounded-lg"
           onClick={handleReserve}
           disabled={!checkIn || !checkOut}
         >
           Reservera
         </Button>
 
-        <p className="text-center text-sm text-muted-foreground">
+        <p className="text-center text-sm text-gray-600">
           Du debiteras inte ännu
         </p>
 
         {/* Price Breakdown */}
         {nights > 0 && (
           <div className="space-y-3">
-            <Separator />
+            <Separator className="bg-gray-200" />
             <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="underline">{price} kr x {nights} nätter</span>
-                <span>{totalBeforeFees} kr</span>
+              <div className="flex justify-between text-gray-900">
+                <span className="underline">{price.toLocaleString('sv-SE')} kr × {nights} nätter</span>
+                <span>{totalBeforeFees.toLocaleString('sv-SE')} kr</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between text-gray-900">
                 <span className="underline">Städavgift</span>
-                <span>{cleaningFee} kr</span>
+                <span>{cleaningFee.toLocaleString('sv-SE')} kr</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between text-gray-900">
                 <span className="underline">Serviceavgift</span>
-                <span>{serviceFee} kr</span>
+                <span>{serviceFee.toLocaleString('sv-SE')} kr</span>
               </div>
             </div>
-            <Separator />
-            <div className="flex justify-between font-medium text-base">
+            <Separator className="bg-gray-200" />
+            <div className="flex justify-between font-semibold text-base text-gray-900">
               <span>Totalt före skatter</span>
-              <span>{total} kr</span>
+              <span>{total.toLocaleString('sv-SE')} kr</span>
             </div>
           </div>
         )}

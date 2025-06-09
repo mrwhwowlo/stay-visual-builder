@@ -12,14 +12,14 @@ const Description = ({ text }: DescriptionProps) => {
   const displayText = shouldTruncate && !isExpanded ? text.slice(0, 300) + '...' : text;
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Om det här boendet</h2>
-      <div className="text-muted-foreground leading-relaxed">
+    <div className="space-y-6">
+      <h2 className="text-2xl font-semibold text-gray-900">Om det här boendet</h2>
+      <div className="text-gray-700 leading-relaxed text-base">
         {displayText}
         {shouldTruncate && (
           <Button 
             variant="link" 
-            className="p-0 h-auto font-medium underline text-foreground"
+            className="p-0 h-auto font-semibold underline text-gray-900 hover:text-gray-700"
             onClick={() => setIsExpanded(!isExpanded)}
           >
             {isExpanded ? ' Visa mindre' : ' Visa mer'}
