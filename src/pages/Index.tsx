@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
@@ -34,14 +33,56 @@ interface Review {
   text: string;
 }
 
+interface SiteContent {
+  [key: string]: string;
+}
+
 const Index = () => {
   const [property, setProperty] = useState<Property | null>(null);
+  const [siteContent, setSiteContent] = useState<SiteContent>({});
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
     fetchProperty();
+    fetchSiteContent();
+    trackUserActivity('page_view', { page: 'home' });
   }, []);
+
+  const fetchSiteContent = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('site_content')
+        .select('key, content');
+
+      if (error) throw error;
+      
+      const contentMap: SiteContent = {};
+      data?.forEach(item => {
+        contentMap[item.key] = item.content;
+      });
+      setSiteContent(contentMap);
+    } catch (error) {
+      console.error('Error fetching site content:', error);
+    }
+  };
+
+  const trackUserActivity = async (activityType: string, details: any) => {
+    try {
+      // Get user's IP and user agent (simplified for demo)
+      const userAgent = navigator.userAgent;
+      
+      await supabase
+        .from('user_activity')
+        .insert([{
+          activity_type: activityType,
+          details: details,
+          user_agent: userAgent
+        }]);
+    } catch (error) {
+      console.error('Error tracking activity:', error);
+    }
+  };
 
   const fetchProperty = async () => {
     try {
@@ -71,13 +112,13 @@ const Index = () => {
       setProperty(transformedProperty);
     } catch (error) {
       console.error('Error fetching property:', error);
-      // Fallback to default data if no properties in database
+      // Use site content if available, otherwise fallback to default
       setProperty({
         id: 'default',
-        title: 'Lyxig villa i Marbella',
-        description: 'En fantastisk villa med havsutsikt i hjärtat av Marbella. Perfekt för familjer och grupper som vill njuta av Costa del Sol. Denna vackra villa erbjuder alla bekvämligheter du behöver för en minnesvärd semester.',
-        location: 'Marbella, Spanien',
-        price_per_night: 350,
+        title: siteContent.site_title || 'Lyxig villa i Marbella',
+        description: siteContent.site_description || 'En fantastisk villa med havsutsikt i hjärtat av Marbella. Perfekt för familjer och grupper som vill njuta av Costa del Sol. Denna vackra villa erbjuder alla bekvämligheter du behöver för en minnesvärd semester.',
+        location: siteContent.site_location || 'Marbella, Spanien',
+        price_per_night: parseInt(siteContent.booking_fee) || 350,
         max_guests: 8,
         bedrooms: 4,
         bathrooms: 3,
@@ -98,9 +139,18 @@ const Index = () => {
   const handleReservation = async (dates: { checkIn: Date; checkOut: Date }, guests: number) => {
     if (!property) return;
 
-    // For now, just show a toast. In a real app, you'd collect guest details
+    // Track booking attempt
+    await trackUserActivity('booking_attempt', {
+      property_id: property.id,
+      check_in: dates.checkIn.toISOString().split('T')[0],
+      check_out: dates.checkOut.toISOString().split('T')[0],
+      guests: guests
+    });
+
     const nights = Math.ceil((dates.checkOut.getTime() - dates.checkIn.getTime()) / (1000 * 60 * 60 * 24));
-    const totalPrice = nights * property.price_per_night + 750 + Math.round(nights * property.price_per_night * 0.14);
+    const bookingFee = parseInt(siteContent.booking_fee) || 750;
+    const serviceFeePercent = parseInt(siteContent.service_fee_percent) || 14;
+    const totalPrice = nights * property.price_per_night + bookingFee + Math.round(nights * property.price_per_night * (serviceFeePercent / 100));
 
     try {
       const { error } = await supabase
@@ -245,3 +295,5 @@ const Index = () => {
 };
 
 export default Index;
+
+</initial_code>

@@ -7,6 +7,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import PropertiesManager from './PropertiesManager';
 import BookingsManager from './BookingsManager';
+import ContentManager from './ContentManager';
+import UserActivityManager from './UserActivityManager';
+import ReviewsManager from './ReviewsManager';
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -39,9 +42,12 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
 
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <Tabs defaultValue="properties" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="properties">Fastigheter</TabsTrigger>
             <TabsTrigger value="bookings">Bokningar</TabsTrigger>
+            <TabsTrigger value="content">Innehåll</TabsTrigger>
+            <TabsTrigger value="reviews">Recensioner</TabsTrigger>
+            <TabsTrigger value="analytics">Analys</TabsTrigger>
           </TabsList>
 
           <TabsContent value="properties">
@@ -50,6 +56,18 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
 
           <TabsContent value="bookings">
             <BookingsManager />
+          </TabsContent>
+
+          <TabsContent value="content">
+            <ContentManager />
+          </TabsContent>
+
+          <TabsContent value="reviews">
+            <ReviewsManager />
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <UserActivityManager />
           </TabsContent>
         </Tabs>
       </main>
