@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
@@ -24,6 +25,15 @@ interface Property {
   images: string[];
 }
 
+interface Review {
+  id: string;
+  userName: string;
+  userAvatar: string;
+  rating: number;
+  date: string;
+  text: string;
+}
+
 const Index = () => {
   const [property, setProperty] = useState<Property | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,7 +53,22 @@ const Index = () => {
         .single();
 
       if (error) throw error;
-      setProperty(data);
+      
+      // Transform the data to match our Property interface
+      const transformedProperty: Property = {
+        id: data.id,
+        title: data.title,
+        description: data.description || '',
+        location: data.location,
+        price_per_night: data.price_per_night,
+        max_guests: data.max_guests,
+        bedrooms: data.bedrooms,
+        bathrooms: data.bathrooms,
+        amenities: Array.isArray(data.amenities) ? data.amenities : [],
+        images: Array.isArray(data.images) ? data.images : []
+      };
+      
+      setProperty(transformedProperty);
     } catch (error) {
       console.error('Error fetching property:', error);
       // Fallback to default data if no properties in database
@@ -148,30 +173,30 @@ const Index = () => {
     joinedDate: 'maj 2015'
   };
 
-  const reviews = [
+  const reviews: Review[] = [
     {
       id: '1',
-      author: 'Anna',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b9c7e7ce?auto=format&fit=crop&w=150&h=150&face',
+      userName: 'Anna',
+      userAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b9c7e7ce?auto=format&fit=crop&w=150&h=150&face',
       rating: 5,
       date: '2024-01-15',
-      comment: 'Fantastisk villa med enastående utsikt! Carlos var en underbar värd och allt var precis som beskrevet. Vi kommer definitivt tillbaka!'
+      text: 'Fantastisk villa med enastående utsikt! Carlos var en underbar värd och allt var precis som beskrevet. Vi kommer definitivt tillbaka!'
     },
     {
       id: '2', 
-      author: 'Erik',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&h=150&face',
+      userName: 'Erik',
+      userAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&h=150&face',
       rating: 5,
       date: '2024-01-20',
-      comment: 'Perfekt läge och otroligt ren villa. Poolen var ett stort plus för barnen. Rekommenderar starkt!'
+      text: 'Perfekt läge och otroligt ren villa. Poolen var ett stort plus för barnen. Rekommenderar starkt!'
     },
     {
       id: '3',
-      author: 'Maria', 
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&h=150&face',
+      userName: 'Maria', 
+      userAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&h=150&face',
       rating: 5,
       date: '2024-02-01',
-      comment: 'Bästa semesterupplevelsen vi haft! Villan överträffade alla förväntningar.'
+      text: 'Bästa semesterupplevelsen vi haft! Villan överträffade alla förväntningar.'
     }
   ];
 

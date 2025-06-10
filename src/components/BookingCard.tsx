@@ -1,9 +1,14 @@
 
 import React, { useState } from 'react';
-import { Calendar, Users, Star } from 'lucide-react';
+import { Calendar, Users, Star, CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { sv } from 'date-fns/locale';
 
 interface BookingCardProps {
   price: number;
@@ -13,10 +18,12 @@ interface BookingCardProps {
 }
 
 const BookingCard = ({ price, rating, reviewCount, onReserve }: BookingCardProps) => {
-  const [checkIn, setCheckIn] = useState<Date | null>(null);
-  const [checkOut, setCheckOut] = useState<Date | null>(null);
+  const [checkIn, setCheckIn] = useState<Date | undefined>();
+  const [checkOut, setCheckOut] = useState<Date | undefined>();
   const [guests, setGuests] = useState(2);
   const [showGuestSelector, setShowGuestSelector] = useState(false);
+  const [showCheckInCalendar, setShowCheckInCalendar] = useState(false);
+  const [showCheckOutCalendar, setShowCheckOutCalendar] = useState(false);
 
   const nights = checkIn && checkOut ? Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24)) : 0;
   const totalBeforeFees = nights * price;
@@ -30,10 +37,27 @@ const BookingCard = ({ price, rating, reviewCount, onReserve }: BookingCardProps
     }
   };
 
-  const formatDate = (date: Date | null) => {
-    if (!date) return 'Lägg till datum';
-    return date.toLocaleDateString('sv-SE', { month: 'short', day: 'numeric' });
+  const handleCheckInSelect = (date: Date | undefined) => {
+    setCheckIn(date);
+    setShowCheckInCalendar(false);
+    // If check-out is before check-in, reset it
+    if (date && checkOut && checkOut <= date) {
+      setCheckOut(undefined);
+    }
   };
+
+  const handleCheckOutSelect = (date: Date | undefined) => {
+    setCheckOut(date);
+    setShowCheckOutCalendar(false);
+  };
+
+  const formatDate = (date: Date | undefined) => {
+    if (!date) return 'Lägg till datum';
+    return format(date, 'd MMM', { locale: sv });
+  };
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   return (
     <Card className="sticky top-32 border border-gray-200 shadow-xl rounded-xl">
@@ -54,20 +78,57 @@ const BookingCard = ({ price, rating, reviewCount, onReserve }: BookingCardProps
       <CardContent className="space-y-4">
         {/* Date Selection */}
         <div className="grid grid-cols-2 border border-gray-300 rounded-lg overflow-hidden">
-          <button 
-            className="p-3 text-left border-r border-gray-300 hover:bg-gray-50 transition-colors"
-            onClick={() => {/* Open date picker */}}
-          >
-            <div className="text-xs font-semibold text-gray-900 uppercase">Incheckning</div>
-            <div className="text-sm text-gray-600">{formatDate(checkIn)}</div>
-          </button>
-          <button 
-            className="p-3 text-left hover:bg-gray-50 transition-colors"
-            onClick={() => {/* Open date picker */}}
-          >
-            <div className="text-xs font-semibold text-gray-900 uppercase">Utcheckning</div>
-            <div className="text-sm text-gray-600">{formatDate(checkOut)}</div>
-          </button>
+          <Popover open={showCheckInCalendar} onOpenChange={setShowCheckInCalendar}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="ghost"
+                className="p-3 h-auto justify-start text-left border-r border-gray-300 rounded-none hover:bg-gray-50"
+              >
+                <div className="w-full">
+                  <div className="text-xs font-semibold text-gray-900 uppercase">Incheckning</div>
+                  <div className="text-sm text-gray-600">{formatDate(checkIn)}</div>
+                </div>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <CalendarComponent
+                mode="single"
+                selected={checkIn}
+                onSelect={handleCheckInSelect}
+                disabled={(date) => date < today}
+                initialFocus
+                className={cn("p-3 pointer-events-auto")}
+              />
+            </PopoverContent>
+          </Popover>
+
+          <Popover open={showCheckOutCalendar} onOpenChange={setShowCheckOutCalendar}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="ghost"
+                className="p-3 h-auto justify-start text-left rounded-none hover:bg-gray-50"
+              >
+                <div className="w-full">
+                  <div className="text-xs font-semibold text-gray-900 uppercase">Utcheckning</div>
+                  <div className="text-sm text-gray-600">{formatDate(checkOut)}</div>
+                </div>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <CalendarComponent
+                mode="single"
+                selected={checkOut}
+                onSelect={handleCheckOutSelect}
+                disabled={(date) => {
+                  if (date < today) return true;
+                  if (checkIn) return date <= checkIn;
+                  return false;
+                }}
+                initialFocus
+                className={cn("p-3 pointer-events-auto")}
+              />
+            </PopoverContent>
+          </Popover>
         </div>
 
         {/* Guest Selection */}
