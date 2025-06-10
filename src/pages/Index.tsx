@@ -54,7 +54,7 @@ const Index = () => {
 
       if (error) throw error;
       
-      // Transform the data to match our Property interface
+      // Transform the data to match our Property interface with proper type handling
       const transformedProperty: Property = {
         id: data.id,
         title: data.title,
@@ -64,8 +64,8 @@ const Index = () => {
         max_guests: data.max_guests,
         bedrooms: data.bedrooms,
         bathrooms: data.bathrooms,
-        amenities: Array.isArray(data.amenities) ? data.amenities : [],
-        images: Array.isArray(data.images) ? data.images : []
+        amenities: Array.isArray(data.amenities) ? (data.amenities as string[]) : [],
+        images: Array.isArray(data.images) ? (data.images as string[]) : []
       };
       
       setProperty(transformedProperty);
