@@ -14,14 +14,12 @@ const Admin = () => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (session?.user) {
-          // Check if user is admin
-          const { data: adminData } = await supabase
-            .from('admin_users')
-            .select('*')
-            .eq('user_id', session.user.id)
-            .maybeSingle();
+          // Check if user is admin using RPC
+          const { data: isAdmin } = await supabase.rpc('is_admin', {
+            user_uuid: session.user.id,
+          });
           
-          setIsAuthenticated(!!adminData);
+          setIsAuthenticated(!!isAdmin);
         } else {
           setIsAuthenticated(false);
         }
@@ -37,13 +35,15 @@ const Admin = () => {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (session?.user) {
-        const { data: adminData } = await supabase
-          .from('admin_users')
-          .select('*')
-          .eq('user_id', session.user.id)
-          .maybeSingle();
+        // Check if user is admin using RPC
+        const { data: isAdmin } = await supabase.rpc('is_admin', {
+          user_uuid: session.user.id,
+        });
         
-        setIsAuthenticated(!!adminData);
+        setIsAuthenticated(!!isAdmin);
+      } else {
+        // If no session, user is not authenticated
+        setIsAuthenticated(false);
       }
     } catch (error) {
       console.error('Auth check error:', error);

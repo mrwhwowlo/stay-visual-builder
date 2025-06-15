@@ -42,20 +42,18 @@ const AdminAuth = ({ onLogin }: AdminAuthProps) => {
       if (data.user) {
         console.log('User logged in with ID:', data.user.id);
         
-        // Check if user is admin
-        const { data: adminData, error: adminError } = await supabase
-          .from('admin_users')
-          .select('*')
-          .eq('user_id', data.user.id)
-          .maybeSingle();
+        // Check if user is admin using RPC
+        const { data: isAdmin, error: rpcError } = await supabase.rpc('is_admin', {
+          user_uuid: data.user.id,
+        });
 
-        console.log('Admin check result:', { adminData, adminError });
+        console.log('Admin check via RPC result:', { isAdmin, rpcError });
 
-        if (adminError || !adminData) {
+        if (rpcError || !isAdmin) {
           console.log('User is not an admin. User ID:', data.user.id);
           toast({
             title: "Åtkomst nekad",
-            description: `Du har inte administratörsbehörighet. User ID: ${data.user.id}`,
+            description: "Du har inte administratörsbehörighet.",
             variant: "destructive",
           });
           await supabase.auth.signOut();
