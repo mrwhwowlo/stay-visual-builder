@@ -21,6 +21,7 @@ interface SiteContent {
   site_location: string;
   booking_fee: string;
   service_fee_percent: string;
+  google_maps_embed?: string;
 }
 
 const Index = () => {
@@ -51,7 +52,8 @@ const Index = () => {
         site_description: contentMap.site_description || '',
         site_location: contentMap.site_location || '',
         booking_fee: contentMap.booking_fee || '',
-        service_fee_percent: contentMap.service_fee_percent || ''
+        service_fee_percent: contentMap.service_fee_percent || '',
+        google_maps_embed: contentMap.google_maps_embed || '',
       };
 
       setSiteContent(siteContentData);
@@ -191,7 +193,10 @@ const Index = () => {
 
             <hr className="border-gray-200" />
 
-            <LocationMap locationName={content.site_location} />
+            <LocationMap
+              locationName={content.site_location}
+              googleMapsEmbed={content.google_maps_embed}
+            />
 
             <hr className="border-gray-200" />
 

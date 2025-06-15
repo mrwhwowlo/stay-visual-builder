@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -32,7 +31,17 @@ const ContentManager = () => {
         .order('key');
 
       if (error) throw error;
-      setContent(data || []);
+      let siteContent = data || [];
+      // If google_maps_embed does not exist, add a blank entry for editing.
+      if (!siteContent.some(c => c.key === 'google_maps_embed')) {
+        siteContent.push({
+          id: `temp-google-maps-embed`,
+          key: 'google_maps_embed',
+          content: '',
+          content_type: 'text',
+        });
+      }
+      setContent(siteContent);
     } catch (error) {
       console.error('Error fetching content:', error);
       toast({
@@ -45,19 +54,35 @@ const ContentManager = () => {
     }
   };
 
-  const updateContent = async (id: string, newContent: string) => {
+  const updateContent = async (id: string, newContent: string, key?: string) => {
+    let targetKey = key;
+    if (!id.startsWith('temp') && !key) {
+      const item = content.find((c) => c.id === id);
+      if (item) targetKey = item.key;
+    }
     try {
-      const { error } = await supabase
-        .from('site_content')
-        .update({ content: newContent, updated_at: new Date().toISOString() })
-        .eq('id', id);
+      if (id.startsWith('temp') && targetKey) {
+        // Insert new key (google_maps_embed)
+        const { error } = await supabase
+          .from('site_content')
+          .insert([
+            {
+              key: targetKey,
+              content: newContent,
+              content_type: 'text',
+            },
+          ]);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('site_content')
+          .update({ content: newContent, updated_at: new Date().toISOString() })
+          .eq('id', id);
 
-      if (error) throw error;
+        if (error) throw error;
+      }
 
-      setContent(content.map(item => 
-        item.id === id ? { ...item, content: newContent } : item
-      ));
-
+      fetchContent();
       toast({
         title: "Uppdaterat",
         description: "Innehållet har uppdaterats.",
@@ -73,7 +98,7 @@ const ContentManager = () => {
   };
 
   const handleContentChange = (id: string, value: string) => {
-    setContent(content.map(item => 
+    setContent(content.map(item =>
       item.id === id ? { ...item, content: value } : item
     ));
   };
@@ -84,7 +109,8 @@ const ContentManager = () => {
       'site_description': 'Beskrivning',
       'site_location': 'Plats',
       'booking_fee': 'Bokningsavgift (kr)',
-      'service_fee_percent': 'Serviceavgift (%)'
+      'service_fee_percent': 'Serviceavgift (%)',
+      'google_maps_embed': 'Google Maps Embed (iframe src)',
     };
     return labels[key] || key;
   };
@@ -102,23 +128,15 @@ const ContentManager = () => {
         {content.map((item) => (
           <div key={item.id} className="space-y-2">
             <Label htmlFor={item.key}>{getContentLabel(item.key)}</Label>
-            {item.content_type === 'textarea' ? (
-              <Textarea
-                id={item.key}
-                value={item.content}
-                onChange={(e) => handleContentChange(item.id, e.target.value)}
-                rows={4}
-              />
-            ) : (
-              <Input
-                id={item.key}
-                type={item.content_type === 'number' ? 'number' : 'text'}
-                value={item.content}
-                onChange={(e) => handleContentChange(item.id, e.target.value)}
-              />
-            )}
+            <Input
+              id={item.key}
+              type={item.key === 'google_maps_embed' ? 'text' : (item.content_type === 'number' ? 'number' : 'text')}
+              placeholder={item.key === 'google_maps_embed' ? "Klistra in hela Google Maps iframe 'src'" : ''}
+              value={item.content}
+              onChange={(e) => handleContentChange(item.id, e.target.value)}
+            />
             <Button
-              onClick={() => updateContent(item.id, item.content)}
+              onClick={() => updateContent(item.id, item.content, item.key)}
               size="sm"
             >
               Uppdatera
