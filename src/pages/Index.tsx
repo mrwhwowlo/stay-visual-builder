@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -142,20 +141,29 @@ const Index = () => {
         checkIn: dates.checkIn.toISOString(),
         checkOut: dates.checkOut.toISOString(),
         guests: guests,
-        price: 2500, // This is hardcoded in BookingCard, passing it from here
+        price: 2500,
         title: content.site_title,
         image: images[0],
-        rating: 4.9, // Hardcoded in BookingCard
-        reviewCount: 127, // Hardcoded in BookingCard
+        rating: 4.9,
+        reviewCount: 127,
         cleaningFee: Number(content.booking_fee) || 750,
         serviceFeePercent: Number(content.service_fee_percent) || 14
       }
     });
   };
 
+  const handleHeaderSearch = (searchData: { checkIn: Date | undefined; checkOut: Date | undefined; guests: number }) => {
+    console.log('Header search:', searchData);
+    // You can implement search functionality here if needed
+    // For now, it just logs the search data
+  };
+
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <Header 
+        listingLocation={content.site_location}
+        onSearch={handleHeaderSearch}
+      />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-12">
