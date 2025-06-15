@@ -39,16 +39,7 @@ const Index = () => {
         return acc;
       }, {} as Record<string, string>);
 
-      // Ensure all required properties exist
-      const siteContentData: SiteContent = {
-        site_title: contentMap.site_title || '',
-        site_description: contentMap.site_description || '',
-        site_location: contentMap.site_location || '',
-        booking_fee: contentMap.booking_fee || '',
-        service_fee_percent: contentMap.service_fee_percent || ''
-      };
-
-      setSiteContent(siteContentData);
+      setSiteContent(contentMap as SiteContent);
     } catch (error) {
       console.error('Error fetching site content:', error);
     }
@@ -99,19 +90,33 @@ const Index = () => {
   const reviews = [
     {
       id: '1',
-      name: 'Anna Svensson',
+      userName: 'Anna Svensson',
+      userAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face',
       rating: 5,
-      comment: 'Fantastisk villa med otrolig utsikt! Perfekt för vår familjesemester.',
+      text: 'Fantastisk villa med otrolig utsikt! Perfekt för vår familjesemester.',
       date: '2024-03-15'
     },
     {
       id: '2', 
-      name: 'Erik Johansson',
+      userName: 'Erik Johansson',
+      userAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face',
       rating: 5,
-      comment: 'Bästa stället vi någonsin bott på. Kommer definitivt tillbaka!',
+      text: 'Bästa stället vi någonsin bott på. Kommer definitivt tillbaka!',
       date: '2024-03-10'
     }
   ];
+
+  const host = {
+    name: 'Maria Gonzalez',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face',
+    isSuperhost: true,
+    joinedDate: '2019'
+  };
+
+  const handleReservation = (dates: { checkIn: Date; checkOut: Date }, guests: number) => {
+    console.log('Reservation details:', { dates, guests });
+    // Here you would typically handle the reservation logic
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -125,11 +130,9 @@ const Index = () => {
             <ListingInfo 
               title={content.site_title}
               location={content.site_location}
-              maxGuests={8}
-              bedrooms={4}
-              bathrooms={3}
               rating={4.9}
               reviewCount={127}
+              host={host}
             />
             
             <Description text={content.site_description} />
@@ -142,9 +145,10 @@ const Index = () => {
           <div className="lg:col-span-1">
             <div className="sticky top-8">
               <BookingCard 
-                basePrice={2500}
-                serviceFeePercent={parseInt(content.service_fee_percent)}
-                cleaningFee={parseInt(content.booking_fee)}
+                price={2500}
+                rating={4.9}
+                reviewCount={127}
+                onReserve={handleReservation}
               />
             </div>
           </div>
