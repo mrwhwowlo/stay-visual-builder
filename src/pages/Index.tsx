@@ -39,7 +39,16 @@ const Index = () => {
         return acc;
       }, {} as Record<string, string>);
 
-      setSiteContent(contentMap as SiteContent);
+      // Ensure all required properties exist with proper type safety
+      const siteContentData: SiteContent = {
+        site_title: contentMap.site_title || '',
+        site_description: contentMap.site_description || '',
+        site_location: contentMap.site_location || '',
+        booking_fee: contentMap.booking_fee || '',
+        service_fee_percent: contentMap.service_fee_percent || ''
+      };
+
+      setSiteContent(siteContentData);
     } catch (error) {
       console.error('Error fetching site content:', error);
     }

@@ -22,12 +22,15 @@ const AdminAuth = ({ onLogin }: AdminAuthProps) => {
     setIsLoading(true);
 
     try {
+      console.log('Attempting login for:', email);
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
+        console.error('Login error:', error);
         toast({
           title: "Inloggningsfel",
           description: error.message,
@@ -37,6 +40,8 @@ const AdminAuth = ({ onLogin }: AdminAuthProps) => {
       }
 
       if (data.user) {
+        console.log('User logged in with ID:', data.user.id);
+        
         // Check if user is admin
         const { data: adminData, error: adminError } = await supabase
           .from('admin_users')
@@ -44,10 +49,13 @@ const AdminAuth = ({ onLogin }: AdminAuthProps) => {
           .eq('user_id', data.user.id)
           .single();
 
+        console.log('Admin check result:', { adminData, adminError });
+
         if (adminError || !adminData) {
+          console.log('User is not an admin. User ID:', data.user.id);
           toast({
             title: "Åtkomst nekad",
-            description: "Du har inte administratörsbehörighet.",
+            description: `Du har inte administratörsbehörighet. User ID: ${data.user.id}`,
             variant: "destructive",
           });
           await supabase.auth.signOut();
@@ -61,6 +69,7 @@ const AdminAuth = ({ onLogin }: AdminAuthProps) => {
         onLogin();
       }
     } catch (error) {
+      console.error('Unexpected error:', error);
       toast({
         title: "Fel",
         description: "Ett oväntat fel inträffade.",
