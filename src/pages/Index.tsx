@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -152,18 +153,9 @@ const Index = () => {
     });
   };
 
-  const handleHeaderSearch = (searchData: { checkIn: Date | undefined; checkOut: Date | undefined; guests: number }) => {
-    console.log('Header search:', searchData);
-    // You can implement search functionality here if needed
-    // For now, it just logs the search data
-  };
-
   return (
     <div className="min-h-screen bg-white">
-      <Header 
-        listingLocation={content.site_location}
-        onSearch={handleHeaderSearch}
-      />
+      <Header />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-12">
