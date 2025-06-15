@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import ImageCarousel from '@/components/ImageCarousel';
@@ -9,6 +8,10 @@ import BookingCard from '@/components/BookingCard';
 import ReviewsCarousel from '@/components/ReviewsCarousel';
 import Footer from '@/components/Footer';
 import { supabase } from '@/integrations/supabase/client';
+import WhereYoullSleep from '@/components/WhereYoullSleep';
+import LocationMap from '@/components/LocationMap';
+import HostProfile from '@/components/HostProfile';
+import HouseRules from '@/components/HouseRules';
 
 interface SiteContent {
   site_title: string;
@@ -115,11 +118,19 @@ const Index = () => {
     }
   ];
 
+  const bedrooms = [
+    { name: 'Sovrum 1', bedType: '1 dubbelsäng' },
+    { name: 'Sovrum 2', bedType: '1 dubbelsäng' },
+    { name: 'Vardagsrum', bedType: '1 bäddsoffa' },
+  ];
+
   const host = {
-    name: 'Maria Gonzalez',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face',
+    name: 'Andreas',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face',
     isSuperhost: true,
-    joinedDate: '2019'
+    joinedDate: '2017',
+    reviews: 253,
+    rating: 5.0,
   };
 
   const handleReservation = (dates: { checkIn: Date; checkOut: Date }, guests: number) => {
@@ -132,8 +143,8 @@ const Index = () => {
       <Header />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-12">
+          <div className="lg:col-span-2 space-y-10">
             <ImageCarousel images={images} />
             
             <ListingInfo 
@@ -144,11 +155,33 @@ const Index = () => {
               host={host}
             />
             
+            <hr className="border-gray-200" />
+            
             <Description text={content.site_description} />
+
+            <hr className="border-gray-200" />
+            
+            <WhereYoullSleep bedrooms={bedrooms} />
+            
+            <hr className="border-gray-200" />
             
             <AmenitiesGrid amenities={amenities} />
             
+            <hr className="border-gray-200" />
+            
             <ReviewsCarousel reviews={reviews} />
+
+            <hr className="border-gray-200" />
+
+            <LocationMap locationName={content.site_location} />
+
+            <hr className="border-gray-200" />
+
+            <HostProfile host={host} />
+            
+            <hr className="border-gray-200" />
+
+            <HouseRules />
           </div>
           
           <div className="lg:col-span-1">
