@@ -39,7 +39,16 @@ const Index = () => {
         return acc;
       }, {} as Record<string, string>);
 
-      setSiteContent(contentMap as SiteContent);
+      // Ensure all required properties exist
+      const siteContentData: SiteContent = {
+        site_title: contentMap.site_title || '',
+        site_description: contentMap.site_description || '',
+        site_location: contentMap.site_location || '',
+        booking_fee: contentMap.booking_fee || '',
+        service_fee_percent: contentMap.service_fee_percent || ''
+      };
+
+      setSiteContent(siteContentData);
     } catch (error) {
       console.error('Error fetching site content:', error);
     }
@@ -77,14 +86,31 @@ const Index = () => {
   ];
 
   const amenities = [
-    'Pool',
-    'WiFi',
-    'Kök',
-    'Parkering',
-    'Luftkonditionering',
-    'Terrass',
-    'Havsutsikt',
-    'Grillplats'
+    { name: 'Pool', icon: '🏊' },
+    { name: 'WiFi', icon: '📶' },
+    { name: 'Kök', icon: '🍳' },
+    { name: 'Parkering', icon: '🚗' },
+    { name: 'Luftkonditionering', icon: '❄️' },
+    { name: 'Terrass', icon: '🌿' },
+    { name: 'Havsutsikt', icon: '🌊' },
+    { name: 'Grillplats', icon: '🔥' }
+  ];
+
+  const reviews = [
+    {
+      id: '1',
+      name: 'Anna Svensson',
+      rating: 5,
+      comment: 'Fantastisk villa med otrolig utsikt! Perfekt för vår familjesemester.',
+      date: '2024-03-15'
+    },
+    {
+      id: '2', 
+      name: 'Erik Johansson',
+      rating: 5,
+      comment: 'Bästa stället vi någonsin bott på. Kommer definitivt tillbaka!',
+      date: '2024-03-10'
+    }
   ];
 
   return (
@@ -99,7 +125,7 @@ const Index = () => {
             <ListingInfo 
               title={content.site_title}
               location={content.site_location}
-              guests={8}
+              maxGuests={8}
               bedrooms={4}
               bathrooms={3}
               rating={4.9}
@@ -110,15 +136,15 @@ const Index = () => {
             
             <AmenitiesGrid amenities={amenities} />
             
-            <ReviewsCarousel />
+            <ReviewsCarousel reviews={reviews} />
           </div>
           
           <div className="lg:col-span-1">
             <div className="sticky top-8">
               <BookingCard 
-                pricePerNight={2500}
+                basePrice={2500}
                 serviceFeePercent={parseInt(content.service_fee_percent)}
-                bookingFee={parseInt(content.booking_fee)}
+                cleaningFee={parseInt(content.booking_fee)}
               />
             </div>
           </div>

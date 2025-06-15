@@ -35,7 +35,8 @@ const UserActivityManager = () => {
           table: 'user_activity'
         },
         (payload) => {
-          setActivities(prev => [payload.new as UserActivity, ...prev]);
+          const newActivity = payload.new as UserActivity;
+          setActivities(prev => [newActivity, ...prev]);
         }
       )
       .subscribe();
@@ -54,7 +55,16 @@ const UserActivityManager = () => {
         .limit(100);
 
       if (error) throw error;
-      setActivities(data || []);
+      
+      // Type cast the data to match our interface
+      const typedData = (data || []).map(item => ({
+        ...item,
+        ip_address: item.ip_address ? String(item.ip_address) : null,
+        user_agent: item.user_agent || null,
+        user_id: item.user_id || null
+      })) as UserActivity[];
+      
+      setActivities(typedData);
     } catch (error) {
       console.error('Error fetching activities:', error);
       toast({
