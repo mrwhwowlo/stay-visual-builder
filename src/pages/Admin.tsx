@@ -19,7 +19,7 @@ const Admin = () => {
             .from('admin_users')
             .select('*')
             .eq('user_id', session.user.id)
-            .single();
+            .maybeSingle();
           
           setIsAuthenticated(!!adminData);
         } else {
@@ -41,7 +41,7 @@ const Admin = () => {
           .from('admin_users')
           .select('*')
           .eq('user_id', session.user.id)
-          .single();
+          .maybeSingle();
         
         setIsAuthenticated(!!adminData);
       }

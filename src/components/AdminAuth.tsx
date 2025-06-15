@@ -47,7 +47,7 @@ const AdminAuth = ({ onLogin }: AdminAuthProps) => {
           .from('admin_users')
           .select('*')
           .eq('user_id', data.user.id)
-          .single();
+          .maybeSingle();
 
         console.log('Admin check result:', { adminData, adminError });
 
