@@ -13,12 +13,14 @@ const Admin = () => {
     
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.id);
         if (session?.user) {
           // Check if user is admin using RPC
-          const { data: isAdmin } = await supabase.rpc('is_admin', {
+          const { data: isAdmin, error } = await supabase.rpc('is_admin', {
             user_uuid: session.user.id,
           });
           
+          console.log('Admin check result:', { isAdmin, error });
           setIsAuthenticated(!!isAdmin);
         } else {
           setIsAuthenticated(false);
@@ -33,13 +35,15 @@ const Admin = () => {
   const checkAuthStatus = async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
+      console.log('Current session:', session?.user?.id);
       
       if (session?.user) {
         // Check if user is admin using RPC
-        const { data: isAdmin } = await supabase.rpc('is_admin', {
+        const { data: isAdmin, error } = await supabase.rpc('is_admin', {
           user_uuid: session.user.id,
         });
         
+        console.log('Initial admin check:', { isAdmin, error });
         setIsAuthenticated(!!isAdmin);
       } else {
         // If no session, user is not authenticated
