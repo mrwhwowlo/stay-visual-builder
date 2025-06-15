@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -14,6 +13,7 @@ import WhereYoullSleep from '@/components/WhereYoullSleep';
 import LocationMap from '@/components/LocationMap';
 import HostProfile from '@/components/HostProfile';
 import HouseRules from '@/components/HouseRules';
+import ContactForm from "@/components/ContactForm";
 
 interface SiteContent {
   site_title: string;
@@ -156,8 +156,11 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
+        {/* Contact button at the top */}
+        <div className="flex justify-end mb-6">
+          <ContactForm />
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-12">
           <div className="lg:col-span-2 space-y-10">
             <ImageCarousel images={images} />

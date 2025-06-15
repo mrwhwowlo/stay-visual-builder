@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,6 +8,7 @@ import BookingsManager from './BookingsManager';
 import ContentManager from './ContentManager';
 import ReviewsManager from './ReviewsManager';
 import StatisticsOverview from './StatisticsOverview';
+import ContactMessagesAdmin from "./ContactMessagesAdmin";
 
 interface AdminDashboardEnhancedProps {
   onLogout: () => void;
@@ -44,12 +44,13 @@ const AdminDashboardEnhanced = ({ onLogout }: AdminDashboardEnhancedProps) => {
 
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <Tabs defaultValue="statistics" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="statistics">Statistik</TabsTrigger>
             <TabsTrigger value="properties">Fastigheter</TabsTrigger>
             <TabsTrigger value="bookings">Bokningar</TabsTrigger>
             <TabsTrigger value="reviews">Recensioner</TabsTrigger>
             <TabsTrigger value="content">Innehåll</TabsTrigger>
+            <TabsTrigger value="contact-messages">Kontakt</TabsTrigger>
           </TabsList>
 
           <TabsContent value="statistics">
@@ -70,6 +71,10 @@ const AdminDashboardEnhanced = ({ onLogout }: AdminDashboardEnhancedProps) => {
 
           <TabsContent value="content">
             <ContentManager />
+          </TabsContent>
+
+          <TabsContent value="contact-messages">
+            <ContactMessagesAdmin />
           </TabsContent>
         </Tabs>
       </main>
