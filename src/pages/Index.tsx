@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import ImageCarousel from '@/components/ImageCarousel';
@@ -142,7 +143,7 @@ const Index = () => {
     <div className="min-h-screen bg-white">
       <Header />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-12">
           <div className="lg:col-span-2 space-y-10">
             <ImageCarousel images={images} />
@@ -185,7 +186,7 @@ const Index = () => {
           </div>
           
           <div className="lg:col-span-1">
-            <div className="sticky top-8">
+            <div className="sticky top-24">
               <BookingCard 
                 price={2500}
                 rating={4.9}
