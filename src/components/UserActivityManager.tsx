@@ -35,8 +35,14 @@ const UserActivityManager = () => {
           table: 'user_activity'
         },
         (payload) => {
-          const newActivity = payload.new as UserActivity;
-          setActivities(prev => [newActivity, ...prev]);
+          const newActivity = payload.new as any;
+          const typedActivity: UserActivity = {
+            ...newActivity,
+            ip_address: newActivity.ip_address ? String(newActivity.ip_address) : null,
+            user_agent: newActivity.user_agent || null,
+            user_id: newActivity.user_id || null
+          };
+          setActivities(prev => [typedActivity, ...prev]);
         }
       )
       .subscribe();
@@ -57,12 +63,12 @@ const UserActivityManager = () => {
       if (error) throw error;
       
       // Type cast the data to match our interface
-      const typedData = (data || []).map(item => ({
+      const typedData: UserActivity[] = (data || []).map(item => ({
         ...item,
         ip_address: item.ip_address ? String(item.ip_address) : null,
         user_agent: item.user_agent || null,
         user_id: item.user_id || null
-      })) as UserActivity[];
+      }));
       
       setActivities(typedData);
     } catch (error) {
