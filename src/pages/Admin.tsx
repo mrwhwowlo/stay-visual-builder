@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import AdminAuth from '@/components/AdminAuth';
-import AdminDashboard from '@/components/AdminDashboard';
+import AdminDashboardEnhanced from '@/components/AdminDashboardEnhanced';
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -62,7 +62,7 @@ const Admin = () => {
   }
 
   return isAuthenticated ? (
-    <AdminDashboard onLogout={() => setIsAuthenticated(false)} />
+    <AdminDashboardEnhanced onLogout={() => setIsAuthenticated(false)} />
   ) : (
     <AdminAuth onLogin={() => setIsAuthenticated(true)} />
   );
