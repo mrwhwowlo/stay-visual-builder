@@ -1,5 +1,7 @@
 
+```typescript
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import ImageCarousel from '@/components/ImageCarousel';
 import ListingInfo from '@/components/ListingInfo';
@@ -24,6 +26,7 @@ interface SiteContent {
 
 const Index = () => {
   const [siteContent, setSiteContent] = useState<SiteContent | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchSiteContent();
@@ -135,8 +138,20 @@ const Index = () => {
   };
 
   const handleReservation = (dates: { checkIn: Date; checkOut: Date }, guests: number) => {
-    console.log('Reservation details:', { dates, guests });
-    // Here you would typically handle the reservation logic
+    navigate('/booking', {
+      state: {
+        checkIn: dates.checkIn.toISOString(),
+        checkOut: dates.checkOut.toISOString(),
+        guests: guests,
+        price: 2500, // This is hardcoded in BookingCard, passing it from here
+        title: content.site_title,
+        image: images[0],
+        rating: 4.9, // Hardcoded in BookingCard
+        reviewCount: 127, // Hardcoded in BookingCard
+        cleaningFee: Number(content.booking_fee) || 750,
+        serviceFeePercent: Number(content.service_fee_percent) || 14
+      }
+    });
   };
 
   return (
@@ -204,3 +219,4 @@ const Index = () => {
 };
 
 export default Index;
+```
